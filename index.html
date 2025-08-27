@@ -207,4 +207,69 @@
         rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
         return;
       }
+      
+        rsvpList.innerHTML = list.map(entry => `
+        <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
+          <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
+          <div class="meta">Guests: ${entry.guests || 0} • ${escapeHtml(entry.diet)}</div>
+          <div style="margin-top:6px">${escapeHtml(entry.message)}</div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(s){
+      if(!s) return '';
+      return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim() || 'Anonymous';
+      const email = document.getElementById('email').value.trim();
+      const attend = document.querySelector('input[name="attend"]:checked').value;
+      const guests = document.getElementById('guests') ? document.getElementById('guests').value : 0;
+      const diet = document.getElementById('diet') ? document.getElementById('diet').value : '';
+      const message = document.getElementById('message').value.trim();
+
+      const entry = {name, email, attend, guests: Number(guests), diet, message, timestamp: new Date().toISOString()};
+      const list = loadResponses();
+      list.unshift(entry);
+      saveResponses(list);
+      renderList();
+
+      confirmation.style.display = 'block';
+      confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been archived.`;
+      form.reset();
+
+      setTimeout(() => confirmation.style.display = 'none', 5000);
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const list = loadResponses();
+      const blob = new Blob([JSON.stringify(list, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'rsvp-responses.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    shareBtn.addEventListener('click', async () => {
+      const title = document.title;
+      const url = location.href;
+      if(navigator.share){
+        try { await navigator.share({title, text:'Join mi birthday party!', url}); }
+        catch(e){ alert('Share cancelled'); }
+      } else {
+        try { await navigator.clipboard.writeText(url); alert('Link copied to clipboard!'); }
+        catch(e){ prompt('Copy this link:', url); }
+      }
+    });
+
+    printBtn.addEventListener('click', () => window.print());
+
+    renderList();
+  </script>
+</body>
+</html>
 
