@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
-<title> 🏴‍☠️Ahoy ye devil🏴‍☠️, yer Invited t' me Birthday Party!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>🏴‍☠️Ahoy ye devil🏴‍☠️, yer Invited t' me Birthday Party!</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -11,10 +11,9 @@
   --card:#ffffff;
   --accent:#ff7aa2;
   --muted:#6b6b6b;
-  --glass: rgba(255,255,255,0.6);
   --radius:18px;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;}
 html,body{
   height:100%;
   margin:0;
@@ -58,8 +57,12 @@ header p{margin:6px 0 0;color:var(--muted)}
   justify-content:center;
   flex-direction:column;
 }
-.date-bubble{background:linear-gradient(135deg,#ffd1dc,#ffefe8);padding:12px 18px;border-radius:999px;font-weight:600}
-
+.date-bubble{
+  background:linear-gradient(135deg,#ffd1dc,#ffefe8);
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:600;
+}
 form{width:100%;max-width:620px;display:grid;gap:12px;align-items:start}
 .row{display:flex;gap:12px;flex-wrap:wrap}
 input[type=text], input[type=email], input[type=number], textarea, select{
@@ -100,9 +103,9 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 /* Mobile adjustments */
 @media(max-width:880px){
   body {
-    flex-direction: column;      /* top-down layout */
-    align-items: stretch;        /* full width cards */
-    justify-content: flex-start; /* start at top */
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
     padding: env(safe-area-inset-top,24px) 12px 12px 12px;
   }
   header h1{font-size:24px}
@@ -113,13 +116,11 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 </style>
 </head>
 <body>
-  <!-- Background music -->
   <audio id="partyMusic" loop>
     <source src="Drunken-Sailor.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- Image popup on load -->
   <div class="popup" id="imagePopup">
     <img src="pirate-me.jpg" alt="Birthday Surprise" />
     <button id="closePopup">Enter digital vessel</button>
@@ -147,8 +148,12 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
         </div>
 
         <div class="row">
-          <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="yes" checked /> I will set sale</label>
-          <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="no" /> I can't make it (I'm a landlubber)</label>
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="radio" name="attend" value="yes" checked /> I will set sale
+          </label>
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="radio" name="attend" value="no" /> I can't make it (I'm a landlubber)
+          </label>
         </div>
 
         <textarea id="message" placeholder="Message or note fer the cap'n (e.g. song request)"></textarea>
@@ -164,7 +169,7 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
     </section>
 
     <aside class="card">
-      <h3 style="margin-top:0"> List o' guests</h3>
+      <h3 style="margin-top:0">List o' guests</h3>
       <div class="rsvp-list" id="rsvpList">
         <p class="meta">Guests</p>
       </div>
@@ -173,7 +178,9 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
         <button id="printBtn" class="ghost">Print invite</button>
       </div>
 
-      <small class="meta" style="display:block;margin-top:12px"> No hoysting any other pirate's flag in my quarters this time please 🙏</small>
+      <small class="meta" style="display:block;margin-top:12px">
+        No hoysting any other pirate's flag in my quarters this time please 🙏
+      </small>
     </aside>
   </main>
 
@@ -190,16 +197,11 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 
     closePopup.addEventListener('click', () => {
       imagePopup.style.display = 'none';
-      partyMusic.play(); // Start music after user clicks
+      partyMusic.play();
     });
 
-    function loadResponses(){
-      const raw = localStorage.getItem('rsvpResponses');
-      return raw ? JSON.parse(raw) : [];
-    }
-    function saveResponses(list){
-      localStorage.setItem('rsvpResponses', JSON.stringify(list));
-    }
+    function loadResponses(){ const raw = localStorage.getItem('rsvpResponses'); return raw ? JSON.parse(raw) : []; }
+    function saveResponses(list){ localStorage.setItem('rsvpResponses', JSON.stringify(list)); }
 
     function renderList(){
       const list = loadResponses();
@@ -216,10 +218,7 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
       `).join('');
     }
 
-    function escapeHtml(s){
-      if(!s) return '';
-      return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[ch]));
-    }
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[ch])); }
 
     form.addEventListener('submit', e=>{
       e.preventDefault();
@@ -229,45 +228,30 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
       const guests = document.getElementById('guests') ? document.getElementById('guests').value : 0;
       const diet = document.getElementById('diet') ? document.getElementById('diet').value : '';
       const message = document.getElementById('message').value.trim();
-
-      const entry = {name, email, attend, guests: Number(guests), diet, message, timestamp: new Date().toISOString()};
-      const list = loadResponses();
-      list.unshift(entry);
-      saveResponses(list);
-      renderList();
-
-      confirmation.style.display = 'block';
-      confirmation.textContent = ` Many a thanks pirate ${name}! Yer RSVP has been archived.`;
-      form.reset();
-
-      setTimeout(()=> confirmation.style.display = 'none', 5000);
+      const entry = {name,email,attend,guests:Number(guests),diet,message,timestamp:new Date().toISOString()};
+      const list = loadResponses(); list.unshift(entry); saveResponses(list); renderList();
+      confirmation.style.display='block'; confirmation.textContent=` Many a thanks pirate ${name}! Yer RSVP has been archived.`; form.reset();
+      setTimeout(()=>confirmation.style.display='none',5000);
     });
 
     downloadBtn.addEventListener('click', ()=>{
-      const list = loadResponses();
-      const blob = new Blob([JSON.stringify(list, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'rsvp-responses.json';
-      document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
+      const list=loadResponses();
+      const blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url; a.download='rsvp-responses.json';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
 
     shareBtn.addEventListener('click', async ()=>{
-      const title = document.title;
-      const url = location.href;
-      if(navigator.share){
-        try{ await navigator.share({title, text:'Join mi birthday party!', url}); }
-        catch(e){ alert('Share cancelled'); }
-      } else {
-        try{ await navigator.clipboard.writeText(url); alert('Link copied to clipboard!'); }
-        catch(e){ prompt('Copy this link:', url); }
-      }
+      const title=document.title; const url=location.href;
+      if(navigator.share){ try{await navigator.share({title,text:'Join mi birthday party!',url});}catch(e){alert('Share cancelled');} } 
+      else { try{await navigator.clipboard.writeText(url); alert('Link copied to clipboard!');}catch(e){prompt('Copy this link:',url);} }
     });
 
-    printBtn.addEventListener('click', ()=> window.print());
-
+    printBtn.addEventListener('click',()=>window.print());
     renderList();
   </script>
 </body>
 </html>
+
