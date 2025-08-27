@@ -1,96 +1,116 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title> 🏴‍☠️Ahoy ye devil🏴‍☠️, yer Invited t' me Birthday Party!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#fff7f0;
-      --card:#ffffff;
-      --accent:#ff7aa2;
-      --muted:#6b6b6b;
-      --glass: rgba(255,255,255,0.6);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
-    body{
-      background: linear-gradient(180deg,var(--bg),#fff);
-      display:flex;align-items:center;justify-content:center;padding:24px;
-    }
-    .scene{
-      max-width:960px;width:100%;display:grid;grid-template-columns:1fr;gap:24px;align-items:center;
-    }
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      padding:28px;box-shadow:0 10px 30px rgba(0,0,0,0.08);
-      display:flex;gap:20px;flex-direction:column;align-items:center;text-align:center;
-    }
-    header h1{margin:0;font-size:28px}
-    header p{margin:6px 0 0;color:var(--muted)}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
+<title> 🏴‍☠️Ahoy ye devil🏴‍☠️, yer Invited t' me Birthday Party!</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff7f0;
+  --card:#ffffff;
+  --accent:#ff7aa2;
+  --muted:#6b6b6b;
+  --glass: rgba(255,255,255,0.6);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+body{
+  background: linear-gradient(180deg,var(--bg),#fff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.scene{
+  max-width:960px;
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px;
+  align-items:center;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  display:flex;
+  gap:20px;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0;color:var(--muted)}
 
-    .hero{
-      width:100%;display:flex;gap:18px;align-items:center;justify-content:center;flex-direction:column
-    }
-    .date-bubble{background:linear-gradient(135deg,#ffd1dc,#ffefe8);padding:12px 18px;border-radius:999px;font-weight:600}
+.hero{
+  width:100%;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+.date-bubble{background:linear-gradient(135deg,#ffd1dc,#ffefe8);padding:12px 18px;border-radius:999px;font-weight:600}
 
-    form{width:100%;max-width:620px;display:grid;gap:12px;align-items:start}
-    .row{display:flex;gap:12px}
-    input[type=text], input[type=email], input[type=number], textarea, select{
-      width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);font-size:14px
-    }
-    textarea{min-height:90px;resize:vertical}
-    .controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-    button{background:var(--accent);color:white;border:0;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
-    button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0,0,0.06)}
-    .meta{font-size:13px;color:var(--muted)}
-    .rsvp-list{max-height:180px;overflow:auto;padding:8px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff0);border:1px dashed rgba(0,0,0,0.03)}
+form{width:100%;max-width:620px;display:grid;gap:12px;align-items:start}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+input[type=text], input[type=email], input[type=number], textarea, select{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);font-size:14px
+}
+textarea{min-height:90px;resize:vertical}
+.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+button{background:var(--accent);color:white;border:0;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
+button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0,0,0.06)}
+.meta{font-size:13px;color:var(--muted)}
+.rsvp-list{max-height:180px;overflow:auto;padding:8px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff0);border:1px dashed rgba(0,0,0,0.03)}
 
-    .footer{display:flex;gap:12px;justify-content:center;align-items:center}
+.footer{display:flex;gap:12px;justify-content:center;align-items:center}
 
-    .popup{
-      position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);
-      display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;
-    }
-    .popup img{max-width:90%;max-height:80%;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-    .popup button{margin-top:20px;background:white;color:black;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  flex-direction:column;
+}
+.popup img{max-width:90%;max-height:80%;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.popup button{margin-top:20px;background:white;color:black;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
 
-    @media(min-width:880px){
-      .scene{grid-template-columns:1fr 420px}
-      .card{align-items:flex-start;text-align:left}
-      .hero{align-items:flex-start}
-    }
+/* Large screen layout */
+@media(min-width:880px){
+  .scene{grid-template-columns:1fr 420px}
+  .card{align-items:flex-start;text-align:left}
+  .hero{align-items:flex-start}
+}
+
+/* Mobile adjustments */
 @media(max-width:880px){
   body {
-    flex-direction: column;      /* keep content flowing top-down */
-    align-items: stretch;        /* stretch horizontally */
-    justify-content: flex-start; /* start from top, not center */
-    padding: env(safe-area-inset-top, 24px) 12px 12px 12px; /* safe area + horizontal padding */
+    flex-direction: column;      /* top-down layout */
+    align-items: stretch;        /* full width cards */
+    justify-content: flex-start; /* start at top */
+    padding: env(safe-area-inset-top,24px) 12px 12px 12px;
   }
-
-  header h1 {
-    font-size: 24px; /* slightly smaller header for small screens */
-  }
-
-  .date-bubble {
-    padding: 10px 14px;
-    font-size: 14px;
-  }
-
-  .card {
-    padding: 20px;
-  }
-
-  .hero {
-    align-items: flex-start;
-  }
+  header h1{font-size:24px}
+  .date-bubble{padding:10px 14px;font-size:14px}
+  .card{padding:20px}
+  .hero{align-items:flex-start}
 }
-    
-  </style>
-  
+</style>
 </head>
 <body>
   <!-- Background music -->
@@ -184,7 +204,7 @@
     function renderList(){
       const list = loadResponses();
       if(!list.length){
-        rsvpList.innerHTML = '<p class="meta">Place yer name hear fellow swashbuckler!</p>';
+        rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
         return;
       }
       rsvpList.innerHTML = list.map(entry => `
@@ -249,6 +269,5 @@
 
     renderList();
   </script>
-
 </body>
 </html>
