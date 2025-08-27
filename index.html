@@ -39,7 +39,7 @@ header p{margin:6px 0 0;color:var(--muted)}
 
 form{width:100%;max-width:620px;display:grid;gap:12px;align-items:start}
 .row{display:flex;gap:12px;flex-wrap:wrap}
-input[type=text], input[type=email], input[type=number], textarea, select{
+input[type=text], input[type=email], textarea{
   width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);font-size:14px
 }
 textarea{min-height:90px;resize:vertical}
@@ -60,7 +60,6 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 
 @media(min-width:880px){
   .scene{grid-template-columns:1fr 420px}
-  .card{align-items:flex-start;text-align:left}
   .hero{align-items:flex-start}
 }
 
@@ -73,7 +72,6 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
   }
   header h1{font-size:24px}
   .date-bubble{padding:10px 14px;font-size:14px}
-  .card{padding:20px}
   .hero{align-items:flex-start}
 }
 </style>
@@ -113,7 +111,7 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
       </div>
 
       <div class="row">
-        <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="yes" checked /> I will set sale</label>
+        <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="yes" checked /> I will set sail</label>
         <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="no" /> I can't make it (I'm a landlubber)</label>
       </div>
 
@@ -121,7 +119,6 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 
       <div class="controls">
         <button type="submit">Deploy RSVP</button>
-        <button type="button" id="downloadBtn" class="ghost">Download responses</button>
       </div>
 
       <p id="confirmation" class="meta" style="display:none"></p>
@@ -139,17 +136,17 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
     </div>
 
     <small class="meta" style="display:block;margin-top:12px"> No hoysting any other pirate's flag in my quarters this time please 🙏</small>
-    <small class="meta" style="display:block;margin-top:6px">
-  Please ask yer cap'n t' bring extra pirates on board (or they will have to walk t' plank)
-</small>
+    <small class="meta" style="display:block;margin-top:6px"> Please ask yer cap'n t' bring extra pirates on board (or they will have to walk t' plank)</small>
   </aside>
 </main>
 
 <script>
+// CHANGE THIS to your deployed Google Apps Script web app URL
+const SCRIPT_URL = "YOUR_WEB_APP_URL_HERE";
+
 const form = document.getElementById('rsvpForm');
 const rsvpList = document.getElementById('rsvpList');
 const confirmation = document.getElementById('confirmation');
-const downloadBtn = document.getElementById('downloadBtn');
 const printBtn = document.getElementById('printBtn');
 const closePopup = document.getElementById('closePopup');
 const imagePopup = document.getElementById('imagePopup');
@@ -157,30 +154,49 @@ const partyMusic = document.getElementById('partyMusic');
 
 closePopup.addEventListener('click', () => {
   imagePopup.style.display = 'none';
-  partyMusic.play(); // Start music after popup closes
+  partyMusic.play();
 });
 
-function loadResponses(){
-  const raw = localStorage.getItem('rsvpResponses');
-  return raw ? JSON.parse(raw) : [];
-}
-function saveResponses(list){
-  localStorage.setItem('rsvpResponses', JSON.stringify(list));
-}
+// Submit RSVP
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim() || 'Anonymous';
+  const email = document.getElementById('email').value.trim();
+  const attend = document.querySelector('input[name="attend"]:checked').value;
+  const message = document.getElementById('message').value.trim();
 
-function renderList(){
-  const list = loadResponses();
-  if(!list.length){
-    rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
-    return;
-  }
-  rsvpList.innerHTML = list.map(entry => `
-    <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
-      <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
-      <div class="meta">Guests: ${entry.guests || 0} • ${escapeHtml(entry.diet)}</div>
-      <div style="margin-top:6px">${escapeHtml(entry.message)}</div>
-    </div>
-  `).join('');
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({name, email, attend, message}),
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then(res=>res.json())
+  .then(()=> {
+    confirmation.style.display = 'block';
+    confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been logged.`;
+    form.reset();
+    loadResponses(); // refresh list
+    setTimeout(()=> confirmation.style.display = 'none', 5000);
+  })
+  .catch(err=> alert("Error sending RSVP: " + err));
+});
+
+// Load RSVPs
+function loadResponses(){
+  fetch(SCRIPT_URL + "?action=get")
+    .then(res=>res.json())
+    .then(data=>{
+      if(!data || !data.length){
+        rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
+        return;
+      }
+      rsvpList.innerHTML = data.map(entry => `
+        <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
+          <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
+          ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
+        </div>
+      `).join('');
+    });
 }
 
 function escapeHtml(s){
@@ -188,42 +204,10 @@ function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
 
-form.addEventListener('submit', e=>{
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim() || 'Anonymous';
-  const email = document.getElementById('email').value.trim();
-  const attend = document.querySelector('input[name="attend"]:checked').value;
-  const guests = document.getElementById('guests') ? document.getElementById('guests').value : 0;
-  const diet = document.getElementById('diet') ? document.getElementById('diet').value : '';
-  const message = document.getElementById('message').value.trim();
-
-  const entry = {name, email, attend, guests: Number(guests), diet, message, timestamp: new Date().toISOString()};
-  const list = loadResponses();
-  list.unshift(entry);
-  saveResponses(list);
-  renderList();
-
-  confirmation.style.display = 'block';
-  confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been archived.`;
-  form.reset();
-
-  setTimeout(()=> confirmation.style.display = 'none', 5000);
-});
-
-downloadBtn.addEventListener('click', ()=>{
-  const list = loadResponses();
-  const blob = new Blob([JSON.stringify(list, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'rsvp-responses.json';
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-});
-
 printBtn.addEventListener('click', ()=> window.print());
 
-renderList();
+// Initial load
+loadResponses();
 </script>
 </body>
 </html>
-
