@@ -58,6 +58,11 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 .popup img{max-width:90%;max-height:80%;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
 .popup button{margin-top:20px;background:white;color:black;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
 
+/* Make sure cursor shows as pointer */
+#closePopup {
+  cursor: pointer;
+}
+
 @media(min-width:880px){
   .scene{grid-template-columns:1fr 420px}
   .hero{align-items:flex-start}
@@ -144,78 +149,81 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0
 // CHANGE THIS to your deployed Google Apps Script web app URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVLU-txrtqhhZQzUnHCMDHfv9zI13-6PYt4yNmci8IwEn-u0d_wiCA5U0yMTo9XMgHfQ/exec";
 
-const form = document.getElementById('rsvpForm');
-const rsvpList = document.getElementById('rsvpList');
-const confirmation = document.getElementById('confirmation');
-const printBtn = document.getElementById('printBtn');
-const closePopup = document.getElementById('closePopup');
-const imagePopup = document.getElementById('imagePopup');
-const partyMusic = document.getElementById('partyMusic');
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('rsvpForm');
+  const rsvpList = document.getElementById('rsvpList');
+  const confirmation = document.getElementById('confirmation');
+  const printBtn = document.getElementById('printBtn');
+  const closePopup = document.getElementById('closePopup');
+  const imagePopup = document.getElementById('imagePopup');
+  const partyMusic = document.getElementById('partyMusic');
 
-closePopup.addEventListener('click', () => {
-  imagePopup.style.display = 'none';
-  partyMusic.play();
-});
+  // Popup close button
+  closePopup.addEventListener('click', () => {
+    imagePopup.style.display = 'none';
+    partyMusic.play();
+  });
 
-// Submit RSVP
-form.addEventListener('submit', e=>{
-  e.preventDefault();
-  const name = document.getElementById('name').value.trim() || 'Anonymous';
-  const email = document.getElementById('email').value.trim();
-  const attend = document.querySelector('input[name="attend"]:checked').value;
-  const message = document.getElementById('message').value.trim();
+  // Submit RSVP
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim() || 'Anonymous';
+    const email = document.getElementById('email').value.trim();
+    const attend = document.querySelector('input[name="attend"]:checked').value;
+    const message = document.getElementById('message').value.trim();
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({name, email, attend, message}),
-    headers: {'Content-Type': 'application/json'}
-  })
-  .then(async res => {
-    const text = await res.text();
-    console.log("Raw response:", text); // 👀 log raw output to DevTools
-    try {
-      return JSON.parse(text);
-    } catch (err) {
-      throw new Error("Response was not JSON: " + text);
-    }
-  })
-  .then(() => {
-    confirmation.style.display = 'block';
-    confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been logged.`;
-    form.reset();
-    loadResponses();
-    setTimeout(()=> confirmation.style.display = 'none', 5000);
-  })
-  .catch(err => alert("Error sending RSVP: " + err));
-
-
-// Load RSVPs
-function loadResponses(){
-  fetch(SCRIPT_URL + "?action=get")
-    .then(res=>res.json())
-    .then(data=>{
-      if(!data || !data.length){
-        rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
-        return;
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({name, email, attend, message}),
+      headers: {'Content-Type': 'application/json'}
+    })
+    .then(async res => {
+      const text = await res.text();
+      console.log("Raw response:", text);
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        throw new Error("Response was not JSON: " + text);
       }
-      rsvpList.innerHTML = data.map(entry => `
-        <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
-          <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
-          ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
-        </div>
-      `).join('');
-    });
-}
+    })
+    .then(() => {
+      confirmation.style.display = 'block';
+      confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been logged.`;
+      form.reset();
+      loadResponses();
+      setTimeout(() => confirmation.style.display = 'none', 5000);
+    })
+    .catch(err => alert("Error sending RSVP: " + err));
+  });
 
-function escapeHtml(s){
-  if(!s) return '';
-  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-}
+  // Load RSVPs
+  function loadResponses() {
+    fetch(SCRIPT_URL + "?action=get")
+      .then(res => res.json())
+      .then(data => {
+        if(!data || !data.length){
+          rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
+          return;
+        }
+        rsvpList.innerHTML = data.map(entry => `
+          <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
+            <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
+            ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
+          </div>
+        `).join('');
+      });
+  }
 
-printBtn.addEventListener('click', ()=> window.print());
+  function escapeHtml(s){
+    if(!s) return '';
+    return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
 
-// Initial load
-loadResponses();
+  printBtn.addEventListener('click', () => window.print());
+
+  // Initial load
+  loadResponses();
+});
 </script>
 </body>
 </html>
