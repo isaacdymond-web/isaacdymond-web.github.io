@@ -170,16 +170,24 @@ form.addEventListener('submit', e=>{
     body: JSON.stringify({name, email, attend, message}),
     headers: {'Content-Type': 'application/json'}
   })
-  .then(res=>res.json())
-  .then(()=> {
+  .then(async res => {
+    const text = await res.text();
+    console.log("Raw response:", text); // 👀 log raw output to DevTools
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      throw new Error("Response was not JSON: " + text);
+    }
+  })
+  .then(() => {
     confirmation.style.display = 'block';
     confirmation.textContent = `Many a thanks pirate ${name}! Yer RSVP has been logged.`;
     form.reset();
-    loadResponses(); // refresh list
+    loadResponses();
     setTimeout(()=> confirmation.style.display = 'none', 5000);
   })
-  .catch(err=> alert("Error sending RSVP: " + err));
-});
+  .catch(err => alert("Error sending RSVP: " + err));
+
 
 // Load RSVPs
 function loadResponses(){
