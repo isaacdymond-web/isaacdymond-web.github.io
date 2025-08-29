@@ -80,9 +80,9 @@
     <form id="rsvpForm">
       <input type="text" id="name" placeholder="Yer Name" required>
       <input type="email" id="email" placeholder="Yer Email" required>
-      <label><input type="radio" name="attend" value="Aboard" required> Aboard</label>
-      <label><input type="radio" name="attend" value="Marooned"> Marooned</label>
-      <textarea id="message" placeholder="Leave a note for the crew"></textarea>
+      <label><input type="radio" name="attend" value="Aboard" required>I will set sail!</label>
+      <label><input type="radio" name="attend" value="Marooned">I will not set sail (I'm a landlubber)</label>
+      <textarea id="message" placeholder="Leave a note fer ye cap'n"></textarea>
       <button type="submit">Send Yer RSVP</button>
     </form>
     <div id="confirmation" class="confirmation"></div>
@@ -98,7 +98,7 @@
 
 <script>
 // CHANGE THIS to your deployed Google Apps Script web app URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIXUB1RnmKEUv9sJqMmtVkBTHyUBpmFtmsn-_SLzMm7FQNTu8Setd1NOjtJYtx2nGpyw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOdxagAaCV6YvVT45jXGM3fR8DXfx4oQve_tZlk-3HnmyX1FwWXgSGWH0_9gR-L1UWUw/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('rsvpForm');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         if(!data || !data.length){
-          rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
+          rsvpList.innerHTML = '<p class="meta">List o' guests!</p>';
           return;
         }
         rsvpList.innerHTML = data.map(entry => `
