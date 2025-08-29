@@ -1,71 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pirate Birthday Invite</title>
-  <style>
-    body {
-      font-family: "Treasure Map Deadhand", cursive, sans-serif;
-      background: #fdf6e3;
-      color: #3b2f2f;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      padding: 20px;
-    }
-    .invite, .guestlist {
-      flex: 1;
-      padding: 20px;
-    }
-    .popup {
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.8);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      z-index:1000;
-    }
-    .popup img {
-      max-width:80%;
-      border:5px solid #fff;
-      border-radius:10px;
-    }
-    #closePopup {
-      margin-top:20px;
-      padding:10px 20px;
-      background:#d4af37;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:18px;
-      font-weight:bold;
-    }
-    form input, form textarea {
-      display:block;
-      margin:10px 0;
-      padding:8px;
-      width:100%;
-      max-width:300px;
-    }
-    .confirmation {
-      margin-top:10px;
-      padding:10px;
-      background:#e0ffd4;
-      border:1px solid #7c9c6b;
-      display:none;
-    }
-    .meta {
-      font-size:0.9em;
-      color:#555;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🏴‍☠️Ahoy ye devil🏴‍☠️, yer Invited t' me Birthday Party!</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff7f0;
+  --card:#ffffff;
+  --accent:#ff7aa2;
+  --muted:#6b6b6b;
+  --glass: rgba(255,255,255,0.6);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+body{
+  background: linear-gradient(180deg,var(--bg),#fff);
+  display:flex;align-items:center;justify-content:center;padding:24px;flex-direction:column;
+}
+.scene{
+  max-width:960px;width:100%;display:grid;grid-template-columns:1fr;gap:24px;align-items:center;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:28px;box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  display:flex;gap:20px;flex-direction:column;align-items:center;text-align:center;
+}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0;color:var(--muted)}
+
+.hero{
+  width:100%;display:flex;gap:18px;align-items:center;justify-content:center;flex-direction:column
+}
+.date-bubble{background:linear-gradient(135deg,#ffd1dc,#ffefe8);padding:12px 18px;border-radius:999px;font-weight:600}
+
+form{width:100%;max-width:620px;display:grid;gap:12px;align-items:start}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+input[type=text], input[type=email], textarea{
+  width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);font-size:14px
+}
+textarea{min-height:90px;resize:vertical}
+.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+button{background:var(--accent);color:white;border:0;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
+button.ghost{background:transparent;color:var(--muted);border:1px solid rgba(0,0,0,0.06)}
+.meta{font-size:13px;color:var(--muted)}
+.rsvp-list{max-height:180px;overflow:auto;padding:8px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff0);border:1px dashed rgba(0,0,0,0.03)}
+
+.footer{display:flex;gap:12px;justify-content:center;align-items:center}
+
+.popup{
+  position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);
+  display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;
+}
+.popup img{max-width:90%;max-height:80%;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.popup button{margin-top:20px;background:white;color:black;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+
+/* Make sure cursor shows as pointer */
+#closePopup {
+  cursor: pointer;
+}
+
+@media(min-width:880px){
+  .scene{grid-template-columns:1fr 420px}
+  .hero{align-items:flex-start}
+}
+
+@media(max-width:880px){
+  body{
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: env(safe-area-inset-top, 24px) 12px 12px 12px;
+  }
+  header h1{font-size:24px}
+  .date-bubble{padding:10px 14px;font-size:14px}
+  .hero{align-items:flex-start}
+}
+</style>
 </head>
 <body>
+<!-- Background music -->
+<audio id="partyMusic" loop>
+  <source src="Drunken-Sailor.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
 <!-- Image popup on load -->
 <div class="popup" id="imagePopup">
@@ -73,32 +94,60 @@
   <button id="closePopup">Enter digital vessel</button>
 </div>
 
-<div class="container">
-  <div class="invite">
-    <h1>Ahoy Matey! 🎉</h1>
-    <p>Come celebrate me voyage 'round the sun!</p>
-    <form id="rsvpForm">
-      <input type="text" id="name" placeholder="Yer Name" required>
-      <input type="email" id="email" placeholder="Yer Email" required>
-      <label><input type="radio" name="attend" value="Aboard" required>I will set sail!</label>
-      <label><input type="radio" name="attend" value="Marooned">I will not set sail (I'm a landlubber)</label>
-      <textarea id="message" placeholder="Leave a note fer ye cap'n"></textarea>
-      <button type="submit">Send Yer RSVP</button>
-    </form>
-    <div id="confirmation" class="confirmation"></div>
-    <button id="printBtn">🖨️ Print Invite</button>
-  </div>
-  <div class="guestlist">
-    <h2>Crew Manifest ⚓</h2>
-    <div id="rsvpList"></div>
-  </div>
-</div>
+<main class="scene">
+  <section class="card">
+    <header>
+      <h1>🏴‍☠️ Yer invited t' me birthday party🏴‍☠️ </h1>
+      <p class="meta">Bring yer own rum (Grog not provided)</p>
+    </header>
 
-<audio id="partyMusic" src="pirate-music.mp3" preload="auto"></audio>
+    <div class="hero">
+      <div class="date-bubble">Saturday, September 27, 2025 · 7:00 PM</div>
+      <p class="meta">My vessel — 102 Tennyson road (NW6 7SB)</p>
+      <p class="meta">Expect to bring many a drink and find many a fellow pirate</p>
+    </div>
+
+    <p class="meta">Deploy yer RSVP below (or don't)</p>
+
+    <form id="rsvpForm">
+      <div class="row">
+        <input id="name" type="text" placeholder="Yer name" required />
+        <input id="email" type="email" placeholder="Yer email (optional)" />
+      </div>
+
+      <div class="row">
+        <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="yes" checked /> I will set sail</label>
+        <label style="display:flex;align-items:center;gap:8px"><input type="radio" name="attend" value="no" /> I can't make it (I'm a landlubber)</label>
+      </div>
+
+      <textarea id="message" placeholder="Message or note fer the cap'n (e.g. song request)"></textarea>
+
+      <div class="controls">
+        <button type="submit">Deploy RSVP</button>
+      </div>
+
+      <p id="confirmation" class="meta" style="display:none"></p>
+    </form>
+  </section>
+
+  <aside class="card">
+    <h3 style="margin-top:0"> Now on list o' guests</h3>
+    <div class="rsvp-list" id="rsvpList">
+      <p class="meta">Guests</p>
+    </div>
+
+    <div style="margin-top:12px" class="footer">
+      <button id="printBtn" class="ghost">Print invite</button>
+    </div>
+
+    <small class="meta" style="display:block;margin-top:12px"> No hoysting any other pirate's flag in my quarters this time please 🙏</small>
+    <small class="meta" style="display:block;margin-top:6px"> Please ask yer cap'n t' bring extra pirates on board (or they will have to walk t' plank)</small>
+  </aside>
+</main>
 
 <script>
 // CHANGE THIS to your deployed Google Apps Script web app URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOdxagAaCV6YvVT45jXGM3fR8DXfx4oQve_tZlk-3HnmyX1FwWXgSGWH0_9gR-L1UWUw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIXUB1RnmKEUv9sJqMmtVkBTHyUBpmFtmsn-_SLzMm7FQNTu8Setd1NOjtJYtx2nGpyw/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('rsvpForm');
@@ -109,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const imagePopup = document.getElementById('imagePopup');
   const partyMusic = document.getElementById('partyMusic');
 
-  // ✅ Popup close button
+  // Popup close button
   closePopup.addEventListener('click', () => {
     imagePopup.style.display = 'none';
     partyMusic.play();
   });
 
-  // ✅ Submit RSVP
+  // Submit RSVP
   form.addEventListener('submit', e => {
     e.preventDefault();
     const name = document.getElementById('name').value.trim() || 'Anonymous';
@@ -139,38 +188,34 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(err => alert("Error sending RSVP: " + err));
   });
 
-  // ✅ Load RSVPs
+  // Load RSVPs
   function loadResponses() {
     fetch(SCRIPT_URL + "?action=get")
       .then(res => res.json())
       .then(data => {
         if(!data || !data.length){
-          rsvpList.innerHTML = '<p class="meta">List o' guests!</p>';
+          rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
           return;
         }
-        rsvpList.innerHTML = data.map(entry => `
-          <div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
+        rsvpList.innerHTML = data.map(entry => 
+          `<div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
             <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
             ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
-          </div>
-        `).join('');
+          </div>`
+        ).join('');
       });
   }
 
   function escapeHtml(s){
     if(!s) return '';
-    return String(s).replace(/[&<>"']/g, ch => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[ch]));
+    return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   }
 
-  // ✅ Print button
   printBtn.addEventListener('click', () => window.print());
 
-  // ✅ Initial load
+  // Initial load
   loadResponses();
 });
 </script>
-
 </body>
 </html>
