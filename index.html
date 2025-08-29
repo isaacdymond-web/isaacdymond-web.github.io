@@ -164,8 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
     partyMusic.play();
   });
 
-  // Submit RSVP
-  form.addEventListener('submit', e => {
+// Submit RSVP
+form.addEventListener('submit', e => {
   e.preventDefault();
 
   const name = document.getElementById('name').value.trim() || 'Anonymous';
@@ -194,33 +194,34 @@ document.addEventListener('DOMContentLoaded', () => {
   .catch(err => alert("Error sending RSVP: " + err));
 });
 
-  // Load RSVPs
-  function loadResponses() {
-    fetch(SCRIPT_URL + "?action=get")
-      .then(res => res.json())
-      .then(data => {
-        if(!data || !data.length){
-          rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
-          return;
-        }
-        rsvpList.innerHTML = data.map(entry => 
-          `<div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
-            <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
-            ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
-          </div>`
-        ).join('');
-      });
-  }
+// Load RSVPs
+function loadResponses() {
+  fetch(SCRIPT_URL + "?action=get")
+    .then(res => res.json())
+    .then(data => {
+      if(!data || !data.length){
+        rsvpList.innerHTML = '<p class="meta">Place yer name here fellow swashbuckler!</p>';
+        return;
+      }
+      rsvpList.innerHTML = data.map(entry => 
+        `<div style="padding:8px;border-bottom:1px solid rgba(0,0,0,0.03)">
+          <strong>${escapeHtml(entry.name)}</strong> • <span class="meta">${escapeHtml(entry.attend)}</span>
+          ${entry.message ? `<div style="margin-top:6px">${escapeHtml(entry.message)}</div>` : ""}
+        </div>`
+      ).join('');
+    });
+}
 
-  function escapeHtml(s){
-    if(!s) return '';
-    return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  }
+function escapeHtml(s){
+  if(!s) return '';
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
 
-  printBtn.addEventListener('click', () => window.print());
+// Print button
+printBtn.addEventListener('click', () => window.print());
 
-  // Initial load
-  loadResponses();
+// Initial load
+loadResponses();
 });
 </script>
 </body>
